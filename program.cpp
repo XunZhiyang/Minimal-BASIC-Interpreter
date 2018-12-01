@@ -22,33 +22,41 @@ Program::~Program() {
 }
 
 void Program::clear() {
-   // Replace this stub with your own code
+    mp.clear();
 }
 
-void Program::addSourceLine(int lineNumber, string line) {
-   // Replace this stub with your own code
+void Program::addSourceLine(int lineNumber, TokenScanner scanner) {
+    map[lineNumber] = convertToStatement(scanner);
 }
 
 void Program::removeSourceLine(int lineNumber) {
-   // Replace this stub with your own code
+    mp.erase(lineNumber);
 }
 
-string Program::getSourceLine(int lineNumber) {
-   return "";    // Replace this stub with your own code
-}
+// string Program::getSourceLine(int lineNumber) {
+//    return "";
+// }
 
-void Program::setParsedStatement(int lineNumber, Statement *stmt) {
-   // Replace this stub with your own code
-}
+// void Program::setParsedStatement(int lineNumber, Statement *stmt) {
+//
+// }
 
 Statement *Program::getParsedStatement(int lineNumber) {
-   return NULL;  // Replace this stub with your own code
+    return mp[lineNumber];
 }
 
 int Program::getFirstLineNumber() {
-   return 0;     // Replace this stub with your own code
+    return mp.begin() -> first;
+    return 0;
 }
 
 int Program::getNextLineNumber(int lineNumber) {
-   return 0;     // Replace this stub with your own code
+    auto i = mp[lineNumber].find(lineNumber);
+    return (++i) -> first;
+    return 0;
+}
+
+void directlyExcecute(TokenScanner scanner) {
+    Statement *p = convertToStatement(scanner);
+    p -> execute();
 }

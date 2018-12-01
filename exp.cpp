@@ -5,11 +5,11 @@
  */
 
 #include <string>
-#include "../StanfordCPPLib/error.h"
+#include "StanfordCPPLib/error.h"
 #include "evalstate.h"
 #include "exp.h"
 
-#include "../StanfordCPPLib/strlib.h"
+#include "StanfordCPPLib/strlib.h"
 
 using namespace std;
 
@@ -88,7 +88,7 @@ string IdentifierExp::getName() {
  * Implementation notes: the CompoundExp subclass
  * ----------------------------------------------
  * The CompoundExp subclass declares instance variables for the operator
- * and the left and right subexpressions.  The implementation of eval 
+ * and the left and right subexpressions.  The implementation of eval
  * evaluates the subexpressions recursively and then applies the operator.
  */
 

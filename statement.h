@@ -15,6 +15,8 @@
 #include "evalstate.h"
 #include "exp.h"
 
+enum StatementType {ASSIGNMENT, PRINT, INPUT, GOTO, CONDITIONAL, END};
+
 /*
  * Class: Statement
  * ----------------
@@ -24,7 +26,6 @@
  * for each of the statement and command types required for the
  * BASIC interpreter.
  */
-
 class Statement {
 
 public:
@@ -62,7 +63,20 @@ public:
 
    virtual void execute(EvalState & state) = 0;
 
+public:
+    string line;
 };
+
+class Assignment : public Statement {
+    Assignment(string _line) : line(_line){}
+    virtual void execute(EvalState & state);
+}
+
+TokenScanner &scannerInit(string);
+
+StatementType statementClassification(TokenScanner &scanner);
+
+Statement *convertToStatement(TokenScanner &scanner);
 
 /*
  * The remainder of this file must consists of subclass

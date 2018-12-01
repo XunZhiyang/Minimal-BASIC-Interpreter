@@ -10,9 +10,9 @@
 #include "exp.h"
 #include "parser.h"
 
-#include "../StanfordCPPLib/error.h"
-#include "../StanfordCPPLib/strlib.h"
-#include "../StanfordCPPLib/tokenscanner.h"
+#include "StanfordCPPLib/error.h"
+#include "StanfordCPPLib/strlib.h"
+#include "StanfordCPPLib/tokenscanner.h"
 using namespace std;
 
 /*

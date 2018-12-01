@@ -14,6 +14,7 @@
 #include "exp.h"
 #include "parser.h"
 #include "program.h"
+#include "statement.h"
 #include "StanfordCPPLib/error.h"
 #include "StanfordCPPLib/tokenscanner.h"
 
@@ -55,12 +56,16 @@ int main() {
  */
 
 void processLine(string line, Program & program, EvalState & state) {
-   TokenScanner scanner;
-   scanner.ignoreWhitespace();
-   scanner.scanNumbers();
-   scanner.setInput(line);
-   Expression *exp = parseExp(scanner);
-   int value = exp->eval(state);
-   cout << value << endl;
-   delete exp;
+    TokenScanner scanner = scannerInit(line);
+    if(line[0] >= '0' && line[0] <= '9') {
+        int tmp = stringToInteger(scanner.nextToken());
+        addSourceLine(tmp, scanner);
+    }
+    else {
+        directlyExcecute(scanner);
+    }
+    // Expression *exp = parseExp(scanner);
+    // int value = exp->eval(state);
+    // cout << value << endl;
+    // delete exp;
 }

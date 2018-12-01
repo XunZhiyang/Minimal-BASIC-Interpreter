@@ -135,10 +135,14 @@ public:
 
    int getNextLineNumber(int lineNumber);
 
-private:
 
+
+private:
+    std::map<int, Statement*> mp;
 // Fill this in with whatever types and instance variables you need
 
 };
+
+void directlyExcecute(TokenScanner scanner);
 
 #endif
