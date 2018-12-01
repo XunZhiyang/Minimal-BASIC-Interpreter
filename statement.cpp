@@ -9,6 +9,12 @@
 
 #include <string>
 #include "statement.h"
+#include "parser.h"
+#include "StanfordCPPLib/error.h"
+#include "StanfordCPPLib/tokenscanner.h"
+#include "StanfordCPPLib/strlib.h"
+#include "StanfordCPPLib/simpio.h"
+
 using namespace std;
 
 /* Implementation of the Statement class */
@@ -20,9 +26,7 @@ Statement::Statement() {
 Statement::~Statement() {
    /* Empty */
 }
-Assignment::Assignment(const TokenScanner &_scanner) : scanner(_scanner) {
-
-}
+Assignment::Assignment(const TokenScanner &_scanner) : scanner(_scanner) {}
 
 virtual void Assignment::execute(EvalState &state) {
     parseExp(scanner) -> eval(state);
@@ -36,7 +40,7 @@ virtual void Print::execute(EvalState &state) {
     cout << value << endl;
 }
 
-Input::Input(const TokenScanner &_scanner) scanner(_scanner) : {}
+Input::Input(const TokenScanner &_scanner) : scanner(_scanner) {}
 
 virtual void Input::execute(EvalState &state) {
     cout << " ? ";
@@ -86,11 +90,14 @@ virtual void Conditional::execute(EvalState &state) {
         tmpScanner.saveToken(p);
     }
     bool flag = false;
-    switch(p) {
-        case "=" : flag = (v1 == v2); break;
-        case "<" : flag = (v1 < v2); break;
-        case ">" : flag = (v1 > v2); break;
-    }
+    if(cmp == "=") flag = (v1 == v2);
+    if(cmp == "<") flag = (v1 < v2);
+    if(cmp == ">") flag = (v1 > v2);
+    // switch(p) {
+    //     case "=" : flag = (v1 == v2); break;
+    //     case "<" : flag = (v1 < v2); break;
+    //     case ">" : flag = (v1 > v2); break;
+    // }
     if(flag) {
         Expression *exp = parseExp(scanner);
         int value = exp->eval(state);
@@ -103,7 +110,7 @@ virtual void End::execute(EvalState &state) {
     state.currentLine = -1;
 }
 
-Rem::Rem(const TokenScanner &_scanner) scanner(_scanner) {}
+Rem::Rem(const TokenScanner &_scanner) : scanner(_scanner) {}
 
 virtual void Rem::execute(EvalState &state) {}
 
@@ -117,20 +124,31 @@ TokenScanner &scannerInit(string line) {
 
 StatementType statementClassification(TokenScanner &scanner) {
     string token = scanner.nextToken();
-    switch(token) {
-        case "LET" : return ASSIGNMENT;
-        case "PRINT" : return PRINT;
-        case "INPUT" : return INPUT;
-        case "GOTO" : return GOTO;
-        case "IF" : return CONDITIONAL;
-        case "END" : return END;
-        case "REM" : return REM;
-        case "RUN" : return RUN;
-    }
+    // char s[7];
+    // for(int i = 0; i < token.length(); ++i) s[i] = token[i];
+    // s[token.length()] = '\0';
+    if(token == "LET") return ASSIGNMENT;
+    if(token == "PRINT") return PRINT;
+    if(token == "INPUT") return INPUT;
+    if(token == "GOTO") return GOTO;
+    if(token == "IF") return CONDITIONAL;
+    if(token == "END") return END;
+    if(token == "REM") return REM;
+    if(token == "RUN") return RUN;
+    // switch(s) {
+    //     case "LET" : return ASSIGNMENT;
+    //     case "PRINT" : return PRINT;
+    //     case "INPUT" : return INPUT;
+    //     case "GOTO" : return GOTO;
+    //     case "IF" : return CONDITIONAL;
+    //     case "END" : return END;
+    //     case "REM" : return REM;
+    //     case "RUN" : return RUN;
+    // }
     return ERROR;
 }
 
-Statement *convertToStatement(TokenScanner &scanner, bool direct, Program &program = Program()) {
+Statement *convertToStatement(TokenScanner &scanner, bool direct, Program &program) {
     StatementType type = statementClassification(scanner);
     Statement *p = NULL;
     switch (type) {

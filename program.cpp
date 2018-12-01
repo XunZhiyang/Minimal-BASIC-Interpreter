@@ -11,11 +11,13 @@
 #include <string>
 #include "program.h"
 #include "statement.h"
+#include "StanfordCPPLib/tokenscanner.h"
+
 using namespace std;
 
-Program::Program() {
-   // Replace this stub with your own code
-}
+// Program::Program() {
+//    // Replace this stub with your own code
+// }
 
 Program::~Program() {
    // Replace this stub with your own code
@@ -28,7 +30,7 @@ void Program::clear() {
     mp.clear();
 }
 
-void Program::addSourceLine(int lineNumber, TokenScanner scanner) {
+void Program::addSourceLine(int lineNumber, TokenScanner &scanner) {
     Statement *p = convertToStatement(scanner, false);
     if(p != NULL){
         if(mp.count(lineNumber)) delete mp[lineNumber];

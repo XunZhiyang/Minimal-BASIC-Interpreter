@@ -10,6 +10,8 @@
 
 #include <string>
 #include "statement.h"
+#include "StanfordCPPLib/tokenscanner.h"
+
 using namespace std;
 
 /*
@@ -36,7 +38,7 @@ public:
  * Constructs an empty BASIC program.
  */
 
-   Program();
+   Program() = default;
 
 /*
  * Destructor: ~Program
@@ -67,7 +69,7 @@ public:
  * program in the correct sequence.
  */
 
-   void addSourceLine(int lineNumber, std::string line);
+   void addSourceLine(int lineNumber, TokenScanner& scanner);
 
 /*
  * Method: removeSourceLine
@@ -89,7 +91,7 @@ public:
  * If no such line exists, this method returns the empty string.
  */
 
-   std::string getSourceLine(int lineNumber);
+   // std::string getSourceLine(int lineNumber);
 
 /*
  * Method: setParsedStatement
@@ -101,7 +103,7 @@ public:
  * exists, the memory for that statement is reclaimed.
  */
 
-   void setParsedStatement(int lineNumber, Statement *stmt);
+   // void setParsedStatement(int lineNumber, Statement *stmt);
 
 /*
  * Method: getParsedStatement
@@ -135,7 +137,7 @@ public:
 
    int getNextLineNumber(int lineNumber);
 
-
+   void run(EvalState &state);
 
 private:
     std::map<int, Statement*> mp;

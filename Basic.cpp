@@ -17,9 +17,9 @@
 #include "statement.h"
 #include "StanfordCPPLib/error.h"
 #include "StanfordCPPLib/tokenscanner.h"
-
-#include "StanfordCPPLib/simpio.h"
 #include "StanfordCPPLib/strlib.h"
+#include "StanfordCPPLib/simpio.h"
+
 using namespace std;
 
 /* Function prototypes */
@@ -59,10 +59,10 @@ void processLine(string line, Program & program, EvalState & state) {
     TokenScanner scanner = scannerInit(line);
     if(line[0] >= '0' && line[0] <= '9') {
         int tmp = stringToInteger(scanner.nextToken());
-        addSourceLine(tmp, scanner);
+        program.addSourceLine(tmp, scanner);
     }
     else {
-        directlyExcecute(scanner, state);
+        directlyExcecute(scanner, state, program);
     }
     // Expression *exp = parseExp(scanner);
     // int value = exp->eval(state);

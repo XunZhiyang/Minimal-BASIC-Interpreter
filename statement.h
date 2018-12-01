@@ -14,6 +14,9 @@
 
 #include "evalstate.h"
 #include "exp.h"
+#include "program.h"
+#include "StanfordCPPLib/tokenscanner.h"
+
 
 enum StatementType {ASSIGNMENT, PRINT, INPUT, GOTO, CONDITIONAL, END, REM, RUN, ERROR};
 
@@ -112,12 +115,12 @@ public:
     Rem();
 
     virtual void execute(EvalState &state);
-}
+};
 TokenScanner &scannerInit(string);
 
 StatementType statementClassification(TokenScanner &scanner);
 
-Statement *convertToStatement(TokenScanner &scanner, bool direct);
+Statement *convertToStatement(TokenScanner &scanner, bool direct, Program &program = Program());
 
 /*
  * The remainder of this file must consists of subclass
