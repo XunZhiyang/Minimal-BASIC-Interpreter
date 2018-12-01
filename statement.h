@@ -14,7 +14,6 @@
 
 #include "evalstate.h"
 #include "exp.h"
-#include "program.h"
 #include "StanfordCPPLib/tokenscanner.h"
 
 
@@ -40,7 +39,9 @@ public:
  * its own constructor.
  */
 
-   Statement();
+    Statement() = default;
+
+    Statement(const TokenScanner &_scanner);
 
 /*
  * Destructor: ~Statement
@@ -92,12 +93,14 @@ public:
 };
 
 class Goto : public Statement {
+public:
     Goto(const TokenScanner &_scanner);
 
     virtual void execute(EvalState &state);
 };
 
 class Conditional : public Statement {
+public:
     Conditional(const TokenScanner &_scanner);
 
     virtual void execute(EvalState &state);
@@ -105,22 +108,17 @@ class Conditional : public Statement {
 
 class End : public Statement {
 public:
-    End();
-
     virtual void execute(EvalState &state);
 };
 
 class Rem : public Statement {
 public:
-    Rem();
-
     virtual void execute(EvalState &state);
 };
-TokenScanner &scannerInit(string);
+TokenScanner scannerInit(string);
 
 StatementType statementClassification(TokenScanner &scanner);
 
-Statement *convertToStatement(TokenScanner &scanner, bool direct, Program &program = Program());
 
 /*
  * The remainder of this file must consists of subclass

@@ -19,37 +19,35 @@ using namespace std;
 
 /* Implementation of the Statement class */
 
-Statement::Statement() {
-   /* Empty */
-}
+Statement::Statement(const TokenScanner &_scanner) : scanner(_scanner){}
 
 Statement::~Statement() {
    /* Empty */
 }
-Assignment::Assignment(const TokenScanner &_scanner) : scanner(_scanner) {}
+Assignment::Assignment(const TokenScanner &_scanner) : Statement(_scanner) {}
 
-virtual void Assignment::execute(EvalState &state) {
+void Assignment::execute(EvalState &state) {
     parseExp(scanner) -> eval(state);
 }
 
-Print::Print(const TokenScanner &_scanner) : scanner(_scanner) {}
+Print::Print(const TokenScanner &_scanner) : Statement(_scanner) {}
 
-virtual void Print::execute(EvalState &state) {
+void Print::execute(EvalState &state) {
     Expression *exp = parseExp(scanner);
     int value = exp->eval(state);
     cout << value << endl;
 }
 
-Input::Input(const TokenScanner &_scanner) : scanner(_scanner) {}
+Input::Input(const TokenScanner &_scanner) : Statement(_scanner) {}
 
-virtual void Input::execute(EvalState &state) {
-    cout << " ? ";
-    string inputString = getLine();
+void Input::execute(EvalState &state) {
     bool flag = true;
     while (flag) {
         flag = false;
         try {
-            scanner.nextToken = stringToInteger(inputString);
+            cout << " ? ";
+            string inputString = getLine();
+            state.setValue(scanner.nextToken(), stringToInteger(inputString));
         } catch (...) {
             flag = true;
             cerr << "INVALID NUMBER" << endl;
@@ -57,17 +55,17 @@ virtual void Input::execute(EvalState &state) {
     }
 }
 
-Goto::Goto(const TokenScanner &_scanner) : scanner(_scanner) {}
+Goto::Goto(const TokenScanner &_scanner) : Statement(_scanner) {}
 
-virtual void Goto::execute(EvalState &state) {
+void Goto::execute(EvalState &state) {
     Expression *exp = parseExp(scanner);
     int value = exp->eval(state);
     state.currentLine = value;
 }
 
-Conditional::Conditional(const TokenScanner &_scanner) : scanner(_scanner) {}
+Conditional::Conditional(const TokenScanner &_scanner) : Statement(_scanner) {}
 
-virtual void Conditional::execute(EvalState &state) {
+void Conditional::execute(EvalState &state) {
     TokenScanner tmpScanner;
     string cmp;
     int v1, v2;
@@ -104,17 +102,17 @@ virtual void Conditional::execute(EvalState &state) {
         state.currentLine = value;
     }
 }
-End::End(const TokenScanner &_scanner) : scanner(_scanner) {}
+// End::End(const TokenScanner &_scanner) : Statement(_scanner) {}
 
-virtual void End::execute(EvalState &state) {
+void End::execute(EvalState &state) {
     state.currentLine = -1;
 }
 
-Rem::Rem(const TokenScanner &_scanner) : scanner(_scanner) {}
+// Rem::Rem(const TokenScanner &_scanner) : Statement(_scanner) {}
 
-virtual void Rem::execute(EvalState &state) {}
+void Rem::execute(EvalState &state) {}
 
-TokenScanner &scannerInit(string line) {
+TokenScanner scannerInit(string line) {
     TokenScanner scanner;
     scanner.ignoreWhitespace();
     scanner.scanNumbers();
@@ -146,42 +144,4 @@ StatementType statementClassification(TokenScanner &scanner) {
     //     case "RUN" : return RUN;
     // }
     return ERROR;
-}
-
-Statement *convertToStatement(TokenScanner &scanner, bool direct, Program &program) {
-    StatementType type = statementClassification(scanner);
-    Statement *p = NULL;
-    switch (type) {
-        case ASSIGNMENT :
-            p = new Assignment(scanner);
-            break;
-        case PRINT :
-            p = new Print(scanner);
-            break;
-        case INPUT :
-            p = new Input(scanner);
-            break;
-        case GOTO :
-            if(direct) error("SYNTAX ERROR");
-            p = new Goto(scanner);
-            break;
-        case CONDITIONAL :
-            if(direct) error("SYNTAX ERROR");
-            p = new Conditional(scanner);
-            break;
-        case END :
-            if(direct) error("SYNTAX ERROR");
-            p = new End;
-            break;
-        case REM :
-            if(direct) error("SYNTAX ERROR");
-            p = new Rem;
-            break;
-        case RUN :
-            if(!direct || scanner.hasMoreTokens()) error("SYNTAX ERROR");
-            break;
-        default :
-            error("NO SUCH STATEMENT");
-    }
-    return p;
 }

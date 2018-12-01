@@ -31,10 +31,10 @@ void Program::clear() {
 }
 
 void Program::addSourceLine(int lineNumber, TokenScanner &scanner) {
-    Statement *p = convertToStatement(scanner, false);
+    Statement *p = convertToStatement(scanner, false, *this);
     if(p != NULL){
         if(mp.count(lineNumber)) delete mp[lineNumber];
-        map[lineNumber] = p;
+        mp[lineNumber] = p;
     }
 }
 
@@ -62,7 +62,7 @@ int Program::getFirstLineNumber() {
 
 int Program::getNextLineNumber(int lineNumber) {
     if(lineNumber == -1) return -1;
-    auto i = mp[lineNumber].find(lineNumber);
+    auto i = mp.find(lineNumber);
     if(++i != mp.end()) return i -> first;
     return -1;
 }
@@ -83,4 +83,42 @@ void directlyExcecute(TokenScanner &scanner, EvalState &state, Program &program)
     else {
         program.run(state);
     }
+}
+
+Statement *convertToStatement(TokenScanner &scanner, bool direct, Program &program) {
+    StatementType type = statementClassification(scanner);
+    Statement *p = NULL;
+    switch (type) {
+        case ASSIGNMENT :
+            p = new Assignment(scanner);
+            break;
+        case PRINT :
+            p = new Print(scanner);
+            break;
+        case INPUT :
+            p = new Input(scanner);
+            break;
+        case GOTO :
+            if(direct) error("SYNTAX ERROR");
+            p = new Goto(scanner);
+            break;
+        case CONDITIONAL :
+            if(direct) error("SYNTAX ERROR");
+            p = new Conditional(scanner);
+            break;
+        case END :
+            if(direct) error("SYNTAX ERROR");
+            p = new End;
+            break;
+        case REM :
+            if(direct) error("SYNTAX ERROR");
+            p = new Rem;
+            break;
+        case RUN :
+            if(!direct || scanner.hasMoreTokens()) error("SYNTAX ERROR");
+            break;
+        default :
+            error("NO SUCH STATEMENT");
+    }
+    return p;
 }
