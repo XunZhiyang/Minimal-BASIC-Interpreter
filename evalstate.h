@@ -27,7 +27,7 @@
 class EvalState {
 
 public:
-
+    int currentLine;
 /*
  * Constructor: EvalState
  * Usage: EvalState state;

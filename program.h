@@ -143,6 +143,6 @@ private:
 
 };
 
-void directlyExcecute(TokenScanner scanner);
+void directlyExcecute(TokenScanner &scanner, EvalState &state, Program &program);
 
 #endif

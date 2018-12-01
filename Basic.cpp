@@ -62,7 +62,7 @@ void processLine(string line, Program & program, EvalState & state) {
         addSourceLine(tmp, scanner);
     }
     else {
-        directlyExcecute(scanner);
+        directlyExcecute(scanner, state);
     }
     // Expression *exp = parseExp(scanner);
     // int value = exp->eval(state);

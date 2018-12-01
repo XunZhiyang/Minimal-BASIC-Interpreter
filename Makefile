@@ -25,11 +25,11 @@ score: ../Test/score
 
 libStanfordCPPLib.a:
 	@if (Test-Path ../libStanfordCPPLib.a) {rm -Force ../libStanfordCPPLib.a}
-	powershell /c "cd ../StanfordCPPLib; make all"
-	cmd /c "mklink /H libStanfordCPPLib.a ..\StanfordCPPLib\libStanfordCPPLib.a"
+	powershell /c "cd StanfordCPPLib; make all"
+	cmd /c "mklink /H libStanfordCPPLib.a StanfordCPPLib\libStanfordCPPLib.a"
 
 spl.jar:
-	cmd /c "mklink /H spl.jar ..\StanfordCPPLib\spl.jar"
+	cmd /c "mklink /H spl.jar StanfordCPPLib\spl.jar"
 
 tidy:
 	rm -Force *~

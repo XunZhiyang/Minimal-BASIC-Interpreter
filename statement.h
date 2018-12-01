@@ -15,7 +15,7 @@
 #include "evalstate.h"
 #include "exp.h"
 
-enum StatementType {ASSIGNMENT, PRINT, INPUT, GOTO, CONDITIONAL, END};
+enum StatementType {ASSIGNMENT, PRINT, INPUT, GOTO, CONDITIONAL, END, REM, RUN, ERROR};
 
 /*
  * Class: Statement
@@ -64,19 +64,60 @@ public:
    virtual void execute(EvalState & state) = 0;
 
 public:
-    string line;
+    TokenScanner scanner;
 };
 
 class Assignment : public Statement {
-    Assignment(string _line) : line(_line){}
-    virtual void execute(EvalState & state);
-}
+public:
+    Assignment(const TokenScanner &_scanner);
 
+    virtual void execute(EvalState &state);
+};
+
+class Print : public Statement {
+public:
+    Print(const TokenScanner &_scanner);
+
+    virtual void execute(EvalState &state);
+};
+
+class Input : public Statement {
+public:
+    Input(const TokenScanner &_scanner);
+
+    virtual void execute(EvalState &state);
+};
+
+class Goto : public Statement {
+    Goto(const TokenScanner &_scanner);
+
+    virtual void execute(EvalState &state);
+};
+
+class Conditional : public Statement {
+    Conditional(const TokenScanner &_scanner);
+
+    virtual void execute(EvalState &state);
+};
+
+class End : public Statement {
+public:
+    End();
+
+    virtual void execute(EvalState &state);
+};
+
+class Rem : public Statement {
+public:
+    Rem();
+
+    virtual void execute(EvalState &state);
+}
 TokenScanner &scannerInit(string);
 
 StatementType statementClassification(TokenScanner &scanner);
 
-Statement *convertToStatement(TokenScanner &scanner);
+Statement *convertToStatement(TokenScanner &scanner, bool direct);
 
 /*
  * The remainder of this file must consists of subclass

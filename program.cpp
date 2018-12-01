@@ -22,14 +22,22 @@ Program::~Program() {
 }
 
 void Program::clear() {
+    for(auto i : mp) {
+        delete i.second;
+    }
     mp.clear();
 }
 
 void Program::addSourceLine(int lineNumber, TokenScanner scanner) {
-    map[lineNumber] = convertToStatement(scanner);
+    Statement *p = convertToStatement(scanner, false);
+    if(p != NULL){
+        if(mp.count(lineNumber)) delete mp[lineNumber];
+        map[lineNumber] = p;
+    }
 }
 
 void Program::removeSourceLine(int lineNumber) {
+    delete mp[lineNumber];
     mp.erase(lineNumber);
 }
 
@@ -51,12 +59,26 @@ int Program::getFirstLineNumber() {
 }
 
 int Program::getNextLineNumber(int lineNumber) {
+    if(lineNumber == -1) return -1;
     auto i = mp[lineNumber].find(lineNumber);
-    return (++i) -> first;
-    return 0;
+    if(++i != mp.end()) return i -> first;
+    return -1;
 }
 
-void directlyExcecute(TokenScanner scanner) {
-    Statement *p = convertToStatement(scanner);
-    p -> execute();
+void Program::run(EvalState &state) {
+    state.currentLine = getFirstLineNumber();
+    for(int &i = state.currentLine; i != -1; i = getNextLineNumber(i)) {
+        mp[i] -> execute(state);
+    }
+}
+
+void directlyExcecute(TokenScanner &scanner, EvalState &state, Program &program) {
+    Statement *p = convertToStatement(scanner, true, program);
+    if(p != NULL) {
+        p -> execute(state);
+        delete p;
+    }
+    else {
+        program.run(state);
+    }
 }
