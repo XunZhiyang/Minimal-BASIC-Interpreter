@@ -3,9 +3,6 @@
  * ---------------
  * Name: Xun Zhiyang
  *
- * This file is the starter project for the BASIC interpreter from
- * Assignment #6.
- * [TODO: extend and correct the documentation]
  */
 
 #include <cctype>
@@ -31,7 +28,7 @@ void processLine(string line, Program & program, EvalState & state);
 int main() {
    EvalState state;
    Program program;
-   cout << "Stub implementation of BASIC" << endl;
+   cerr << "Stub implementation of BASIC" << endl;
    while (true) {
        // cerr << "I'm doing!!!" << endl;
       try {
