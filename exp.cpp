@@ -69,7 +69,7 @@ IdentifierExp::IdentifierExp(string name) {
 }
 
 int IdentifierExp::eval(EvalState & state) {
-   if (!state.isDefined(name)) error(name + " is undefined");
+   if (!state.isDefined(name)) error("VARIABLE NOT DEFINED");
    return state.getValue(name);
 }
 
