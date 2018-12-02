@@ -1,8 +1,6 @@
 # Makefile for StanfordCPPLib
 #****************************************************************
 
-SHELL = powershell.exe
-
 OBJECTS = \
     error.o \
     gmath.o \
@@ -109,11 +107,7 @@ tokenscanner.o: tokenscanner.cpp error.h stack.h strlib.h tokenscanner.h
 #    clean -- delete derived files in preparation for rebuild
 
 tidy:
-	rm -Force *~ 
-	if (Test-Path rm) {-Force core}
-	if (Test-Path a.out) {rm -Force a.out}
-	rm -Force *.err
+	rm -f ,* .,* *~ core a.out *.err
 
 clean scratch: tidy
-	rm -Force *.o
-	rm -Force *.a
+	rm -f *.o *.a $(PROGRAM)
