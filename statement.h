@@ -66,17 +66,18 @@ public:
 
    virtual void execute(EvalState & state) = 0;
 
-   Statement(TokenScanner *_scanner);
+   Statement(TokenScanner *_scanner, int _lineNumber);
 
    virtual void print() const = 0;
 public:
     // TokenScanner *scanner;
     string line;
+    int _lineNumber;
 };
 
 class Assignment : public Statement {
 public:
-    Assignment(TokenScanner *_scanner);
+    Assignment(TokenScanner *_scanner, int _lineNumber);
 
     virtual void execute(EvalState &state);
 
@@ -85,7 +86,7 @@ public:
 
 class Print : public Statement {
 public:
-    Print(TokenScanner *_scanner);
+    Print(TokenScanner *_scanner, int _lineNumber);
 
     virtual void execute(EvalState &state);
 
@@ -94,7 +95,7 @@ public:
 
 class Input : public Statement {
 public:
-    Input(TokenScanner *_scanner);
+    Input(TokenScanner *_scanner, int _lineNumber);
 
     virtual void execute(EvalState &state);
 
@@ -103,7 +104,7 @@ public:
 
 class Goto : public Statement {
 public:
-    Goto(TokenScanner *_scanner);
+    Goto(TokenScanner *_scanner, int _lineNumber);
 
     virtual void execute(EvalState &state);
 
@@ -112,7 +113,7 @@ public:
 
 class Conditional : public Statement {
 public:
-    Conditional(TokenScanner *_scanner);
+    Conditional(TokenScanner *_scanner, int _lineNumber);
 
     virtual void execute(EvalState &state);
 
@@ -121,14 +122,16 @@ public:
 
 class End : public Statement {
 public:
-    virtual void execute(EvalState &state);
+    End(int _linenumber);
+
+    virtual void execute(EvalState &state, int _lineNumber);
 
     virtual void print() const;
 };
 
 class Rem : public Statement {
 public:
-    Rem(TokenScanner *_scanner);
+    Rem(TokenScanner *_scanner, int _lineNumber);
 
     virtual void execute(EvalState &state);
 

@@ -19,19 +19,17 @@ using namespace std;
 
 /* Implementation of the Statement class */
 
-Statement::Statement(TokenScanner *_scanner) {
+Statement::Statement(TokenScanner *_scanner, int _lineNumber) lineNumber(_lineNumber){
     line.clear();
     while(_scanner -> hasMoreTokens()){
         line += _scanner -> nextToken();
         line += " ";
     }
-    // cerr << "6666666" << line << endl;
 }
 
 Statement::~Statement() {
-   // if(scanner != nullptr) delete scanner;
 }
-Assignment::Assignment(TokenScanner *_scanner) : Statement(_scanner) {}
+Assignment::Assignment(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNumber) {}
 
 void Assignment::execute(EvalState &state) {
     TokenScanner *scanner = scannerInit(line);
@@ -39,7 +37,7 @@ void Assignment::execute(EvalState &state) {
     delete scanner;
 }
 
-Print::Print(TokenScanner *_scanner) : Statement(_scanner) {}
+Print::Print(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNumber) {}
 
 void Print::execute(EvalState &state) {
     TokenScanner *scanner = scannerInit(line);
@@ -54,7 +52,7 @@ void Print::execute(EvalState &state) {
     // cerr << "I'm printing!!!" << endl;
 }
 
-Input::Input(TokenScanner *_scanner) : Statement(_scanner) {}
+Input::Input(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNumber) {}
 
 void Input::execute(EvalState &state) {
     TokenScanner *scanner = scannerInit(line);
@@ -74,7 +72,7 @@ void Input::execute(EvalState &state) {
 }
 
 
-Goto::Goto(TokenScanner *_scanner) : Statement(_scanner) {}
+Goto::Goto(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNumber) {}
 
 void Goto::execute(EvalState &state) {
     TokenScanner *scanner = scannerInit(line);
@@ -84,7 +82,7 @@ void Goto::execute(EvalState &state) {
     delete scanner;
 }
 
-Conditional::Conditional(TokenScanner *_scanner) : Statement(_scanner) {}
+Conditional::Conditional(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNumber) {}
 
 void Conditional::execute(EvalState &state) {
     // cerr << "~~~" << line << endl;
@@ -128,36 +126,36 @@ void Conditional::execute(EvalState &state) {
     // cerr << "finish third part" << endl;
     delete scanner;
 }
-// End::End(TokenScanner *_scanner) : Statement(_scanner) {}
+End::End(int _lineNumber) : lineNumber(_lineNumber) {}
 
 void End::execute(EvalState &state) {
     state.currentLine = -1;
 }
 
-Rem::Rem(TokenScanner *_scanner) : Statement(_scanner) {}
+Rem::Rem(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNumber) {}
 
 void Rem::execute(EvalState &state) {}
 
 void Assignment::print() const {
-    cout << line << endl;
+    cout << "LET " << line << endl;
 }
 void Print::print() const {
-    cout << line << endl;
+    cout << "PRINT " << line << endl;
 }
 void Input::print() const {
-    cout << line << endl;
+    cout << "INPUT " << line << endl;
 }
 void Goto::print() const {
-    cout << line << endl;
+    cout << "GOTO" << line << endl;
 }
 void Conditional::print() const {
-    cout << line << endl;
+    cout << "IF " << line << endl;
 }
 void End::print() const {
-    cout << line << endl;
+    cout << "END " << line << endl;
 }
 void Rem::print() const{
-    cout << line << endl;
+    cout << "REM " << line << endl;
 }
 
 

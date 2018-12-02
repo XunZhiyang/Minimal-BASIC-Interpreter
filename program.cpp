@@ -32,7 +32,7 @@ void Program::clear() {
 
 void Program::addSourceLine(int lineNumber, TokenScanner *scanner) {
     StatementType type;
-    Statement *p = convertToStatement(scanner, false, *this, type);
+    Statement *p = convertToStatement(scanner, false, *this, type, lineNumber);
     // while (scanner -> hasMoreTokens()) {
         // cerr <<"___" << scanner -> nextToken() << "___" <<endl;
     // }
@@ -115,7 +115,7 @@ void directlyExcecute(TokenScanner *scanner, EvalState &state, Program &program)
     }
 }
 
-Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program, StatementType &type) {
+Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program, StatementType &type, int lineNumber = 0) {
     // cerr << "Converting!!!" << endl;
     type = statementClassification(scanner);
     // cerr << "Classification succeed!!" << endl;
@@ -123,29 +123,29 @@ Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &progr
     Statement *p = NULL;
     switch (type) {
         case ASSIGNMENT :
-            p = new Assignment(scanner);
+            p = new Assignment(scanner, lineNumbers);
             break;
         case PRINT :
-            p = new Print(scanner);
+            p = new Print(scanner, lineNumbers);
             break;
         case INPUT :
-            p = new Input(scanner);
+            p = new Input(scanner, lineNumbers);
             break;
         case GOTO :
             if(direct) error("SYNTAX ERROR");
-            p = new Goto(scanner);
+            p = new Goto(scanner, lineNumbers);
             break;
         case CONDITIONAL :
             if(direct) error("SYNTAX ERROR");
-            p = new Conditional(scanner);
+            p = new Conditional(scanner, lineNumbers);
             break;
         case END :
             if(direct) error("SYNTAX ERROR");
-            p = new End;
+            p = new End(lineNumber);
             break;
         case REM :
             if(direct) error("SYNTAX ERROR");
-            p = new Rem(scanner);
+            p = new Rem(scanner, lineNumbers);
             break;
         case RUN :
             if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
