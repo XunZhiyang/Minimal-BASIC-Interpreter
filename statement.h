@@ -17,7 +17,7 @@
 #include "StanfordCPPLib/tokenscanner.h"
 
 
-enum StatementType {ASSIGNMENT, PRINT, INPUT, GOTO, CONDITIONAL, END, REM, RUN, ERROR, QUIT, CLEAR, LIST};
+enum StatementType {ASSIGNMENT, PRINT, INPUT, GOTO, CONDITIONAL, END, REM, RUN, ERROR, QUIT, CLEAR, LIST, DELETE};
 
 /*
  * Class: Statement

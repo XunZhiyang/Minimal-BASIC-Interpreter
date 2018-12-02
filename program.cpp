@@ -37,8 +37,13 @@ void Program::addSourceLine(int lineNumber, TokenScanner *scanner) {
         // cerr <<"___" << scanner -> nextToken() << "___" <<endl;
     // }
     if(p != NULL){
-        if(mp.count(lineNumber)) delete mp[lineNumber];
-        mp[lineNumber] = p;
+        if(type == DELETE) {
+            removeSourceLine(lineNumber);
+        }
+        else{
+            if(mp.count(lineNumber)) delete mp[lineNumber];
+            mp[lineNumber] = p;
+        }
     }
 }
 
@@ -118,9 +123,12 @@ void directlyExcecute(TokenScanner *scanner, EvalState &state, Program &program)
 
 Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program, StatementType &type, int lineNumber) {
     // cerr << "Converting!!!" << endl;
+    if(!scanner.hasMoreTokens()) {
+        type = DELETE;
+        return NULL;
+    }
     type = statementClassification(scanner);
     // cerr << "Classification succeed!!" << endl;
-
     Statement *p = NULL;
     switch (type) {
         case ASSIGNMENT :
