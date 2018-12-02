@@ -124,7 +124,7 @@ class End : public Statement {
 public:
     End(int _linenumber);
 
-    virtual void execute(EvalState &state, int _lineNumber);
+    virtual void execute(EvalState &state);
 
     virtual void print() const;
 };
