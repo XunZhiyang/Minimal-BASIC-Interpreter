@@ -22,8 +22,8 @@ using namespace std;
 Statement::Statement(TokenScanner *_scanner, int _lineNumber) : lineNumber(_lineNumber){
     line.clear();
     while(_scanner -> hasMoreTokens()){
-        line += _scanner -> nextToken();
         line += " ";
+        line += _scanner -> nextToken();
     }
 }
 
@@ -139,25 +139,25 @@ Rem::Rem(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNum
 void Rem::execute(EvalState &state) {}
 
 void Assignment::print() const {
-    cout << lineNumber << " LET " << line << endl;
+    cout << lineNumber << " LET" << line << endl;
 }
 void Print::print() const {
-    cout << lineNumber << " PRINT " << line << endl;
+    cout << lineNumber << " PRINT" << line << endl;
 }
 void Input::print() const {
-    cout << lineNumber << " INPUT " << line << endl;
+    cout << lineNumber << " INPUT" << line << endl;
 }
 void Goto::print() const {
-    cout << lineNumber << " GOTO" << line << endl;
+    cout << lineNumber << " GOT" << line << endl;
 }
 void Conditional::print() const {
-    cout << lineNumber << " IF " << line << endl;
+    cout << lineNumber << " IF" << line << endl;
 }
 void End::print() const {
-    cout << lineNumber << " END " << line << endl;
+    cout << lineNumber << " END" << line << endl;
 }
 void Rem::print() const{
-    cout << lineNumber << " REM " << line << endl;
+    cout << lineNumber << " REM" << line << endl;
 }
 
 
