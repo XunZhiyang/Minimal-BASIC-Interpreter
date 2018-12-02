@@ -21,9 +21,11 @@ using namespace std;
 
 Statement::Statement(TokenScanner *_scanner) {
     line.clear();
-    while(_scanner -> hasMoreTokens())
-    line += _scanner -> nextToken();
-    line += ' ';
+    while(_scanner -> hasMoreTokens()){
+        line += _scanner -> nextToken();
+        line += " ";
+    }
+    // cerr << "6666666" << line << endl;
 }
 
 Statement::~Statement() {
@@ -85,12 +87,15 @@ void Goto::execute(EvalState &state) {
 Conditional::Conditional(TokenScanner *_scanner) : Statement(_scanner) {}
 
 void Conditional::execute(EvalState &state) {
+    // cerr << "~~~" << line << endl;
     TokenScanner *scanner = scannerInit(line);
     TokenScanner tmpScanner;
     string cmp;
     int v1, v2;
+    // cerr << "start first part" << endl;
     for(;;) {
         string p = scanner -> nextToken();
+        // cerr << "**" << p <<"**" << endl;
         if(p == "<" || p == "=" || p == ">") {
             v1 = parseExp(tmpScanner) -> eval(state);
             cmp = p;
@@ -98,15 +103,19 @@ void Conditional::execute(EvalState &state) {
         }
         tmpScanner.saveToken(p);
     }
+    // cerr << "finish first part" << endl;
     while(tmpScanner.hasMoreTokens()) tmpScanner.nextToken();
+    // cerr << "start second part" << endl;
     for(;;) {
         string p = scanner -> nextToken();
+        // cerr << "__" << p <<"__" << endl;
         if(p == "THEN") {
             v2 = parseExp(tmpScanner) -> eval(state);
             break;
         }
         tmpScanner.saveToken(p);
     }
+    // cerr << "finish second part" << endl;
     bool flag = false;
     if(cmp == "=") flag = (v1 == v2);
     if(cmp == "<") flag = (v1 < v2);
@@ -116,6 +125,7 @@ void Conditional::execute(EvalState &state) {
         int value = exp->eval(state);
         state.currentLine = -value;
     }
+    // cerr << "finish third part" << endl;
     delete scanner;
 }
 // End::End(TokenScanner *_scanner) : Statement(_scanner) {}
@@ -129,58 +139,30 @@ Rem::Rem(TokenScanner *_scanner) : Statement(_scanner) {}
 void Rem::execute(EvalState &state) {}
 
 void Assignment::print() const {
-    TokenScanner *scanner = scannerInit(line);
-    cout << "LET ";
-    while(scanner -> hasMoreTokens()) cout << scanner -> nextToken();
-    cout << endl;
-    delete scanner;
+    cout << line << endl;
 }
 void Print::print() const {
-    TokenScanner *scanner = scannerInit(line);
-    cout << "PRINT ";
-    while(scanner -> hasMoreTokens()) cout << scanner -> nextToken();
-    cout << endl;
-    delete scanner;
+    cout << line << endl;
 }
 void Input::print() const {
-    TokenScanner *scanner = scannerInit(line);
-    cout << "INPUT ";
-    while(scanner -> hasMoreTokens()) cout << scanner -> nextToken();
-    cout << endl;
-    delete scanner;
+    cout << line << endl;
 }
 void Goto::print() const {
-    TokenScanner *scanner = scannerInit(line);
-    cout << "GOTO ";
-    while(scanner -> hasMoreTokens()) cout << scanner -> nextToken();
-    cout << endl;
-    delete scanner;
+    cout << line << endl;
 }
 void Conditional::print() const {
-    TokenScanner *scanner = scannerInit(line);
-    cout << "IF ";
-    while(scanner -> hasMoreTokens()) cout << scanner -> nextToken();
-    cout << endl;
-    delete scanner;
+    cout << line << endl;
 }
 void End::print() const {
-    TokenScanner *scanner = scannerInit(line);
-    cout << "END ";
-    while(scanner -> hasMoreTokens()) cout << scanner -> nextToken();
-    cout << endl;
-    delete scanner;
+    cout << line << endl;
 }
 void Rem::print() const{
-    TokenScanner *scanner = scannerInit(line);
-    cout << "REM ";
-    while(scanner -> hasMoreTokens()) cout << scanner -> nextToken();
-    cout << endl;
-    delete scanner;
+    cout << line << endl;
 }
 
 
 
-TokenScanner *scannerInit(string line) {
+TokenScanner *scannerInit(const string &line) {
     TokenScanner *scanner = new TokenScanner;
     scanner -> scanStrings();
     scanner -> ignoreWhitespace();

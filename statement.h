@@ -134,7 +134,7 @@ public:
 
     virtual void print() const;
 };
-TokenScanner *scannerInit(string);
+TokenScanner *scannerInit(const string&);
 
 StatementType statementClassification(TokenScanner *scanner);
 
