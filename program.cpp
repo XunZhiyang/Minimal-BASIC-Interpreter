@@ -31,10 +31,10 @@ void Program::clear() {
 }
 
 void Program::addSourceLine(int lineNumber, TokenScanner *scanner) {
-
-    Statement *p = convertToStatement(scanner, false, *this);
+    StatementType type;
+    Statement *p = convertToStatement(scanner, false, *this, type);
     // while (scanner -> hasMoreTokens()) {
-    //     cerr <<"___" << scanner -> nextToken() << "___" <<endl;
+        // cerr <<"___" << scanner -> nextToken() << "___" <<endl;
     // }
     if(p != NULL){
         if(mp.count(lineNumber)) delete mp[lineNumber];
@@ -64,8 +64,14 @@ int Program::getFirstLineNumber() {
     return 0;
 }
 
+int Program::getPreviousLineNumber(int lineNumber) {
+    auto i = mp.find(lineNumber);
+    if(i != mp.begin()) return (--i) -> first;
+    return -1;
+}
+
 int Program::getNextLineNumber(int lineNumber) {
-    if(lineNumber == -1) return -1;
+    if(lineNumber == -1) return getFirstLineNumber();
     auto i = mp.find(lineNumber);
     if(++i != mp.end()) return i -> first;
     return -1;
@@ -75,27 +81,44 @@ void Program::run(EvalState &state) {
     state.currentLine = getFirstLineNumber();
     for(int &i = state.currentLine; i != -1; i = getNextLineNumber(i)) {
         mp[i] -> execute(state);
+        if(i < 0) {
+            i = getPreviousLineNumber(-i);
+        }
+    }
+}
+
+void Program::list() {
+    for(auto i : mp) {
+        i.second -> print();
     }
 }
 
 void directlyExcecute(TokenScanner *scanner, EvalState &state, Program &program) {
-    Statement *p = convertToStatement(scanner, true, program);
-    cerr << "I'm finishing!!!" << endl;
+    StatementType type;
+    Statement *p = convertToStatement(scanner, true, program, type);
+    // cerr << "I'm finishing!!!" << endl;
     if(p != NULL) {
-        cerr << "I'm finishing!!!" << endl;
         p -> execute(state);
+        // cerr << "I'm finishing!!!" << endl;
         delete p;
-        cerr << "I'm finished!!!" << endl;
+        // cerr << "I'm finished!!!" << endl;
     }
     else {
-        program.run(state);
+        if(type == RUN) program.run(state);
+        if(type == CLEAR) {
+            program.clear();
+            state.clear();
+        }
+        if(type == LIST) {
+            program.list();
+        }
     }
 }
 
-Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program) {
-    cerr << "Converting!!!" << endl;
-    StatementType type = statementClassification(scanner);
-    cerr << "Classification succeed!!" << endl;
+Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program, StatementType &type) {
+    // cerr << "Converting!!!" << endl;
+    type = statementClassification(scanner);
+    // cerr << "Classification succeed!!" << endl;
 
     Statement *p = NULL;
     switch (type) {
@@ -122,16 +145,27 @@ Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &progr
             break;
         case REM :
             if(direct) error("SYNTAX ERROR");
-            p = new Rem;
+            p = new Rem(scanner);
             break;
         case RUN :
             if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
+            delete scanner;
             break;
         case QUIT :
             if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
+            delete scanner;
             error("QUIT");
             break;
+        case CLEAR :
+            if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
+            delete scanner;
+            break;
+        case LIST :
+            if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
+            delete scanner;
+            break;
         default :
+            delete scanner;
             error("NO SUCH STATEMENT");
     }
     return p;

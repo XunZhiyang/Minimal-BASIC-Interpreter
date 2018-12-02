@@ -21,7 +21,7 @@
  * whitespace and to scan numbers.
  */
 
-Expression *parseExp(TokenScanner & scanner);
+Expression *parseExp(const TokenScanner & scanner);
 
 /*
  * Function: readE

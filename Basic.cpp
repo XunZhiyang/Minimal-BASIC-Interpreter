@@ -33,16 +33,16 @@ int main() {
    Program program;
    cout << "Stub implementation of BASIC" << endl;
    while (true) {
-       cerr << "I'm doing!!!" << endl;
+       // cerr << "I'm doing!!!" << endl;
       try {
-          cerr << "I'm reading!!!" << endl;
+          // cerr << "I'm reading!!!" << endl;
          processLine(getLine(), program, state);
       } catch (ErrorException & ex) {
           if(ex.getMessage() == "QUIT") break;
-          cerr << "I'm error!!!" << endl;
+          // cerr << "I'm error!!!" << endl;
          cerr << "Error: " << ex.getMessage() << endl;
       }
-      cerr << "I'm aftererror!!!" << endl;
+      // cerr << "I'm aftererror!!!" << endl;
    }
    return 0;
 }
@@ -61,7 +61,7 @@ int main() {
  */
 
 void processLine(string line, Program & program, EvalState & state) {
-    cerr << "gthdhthtrdhrtdh" << endl;
+    // cerr << "gthdhthtrdhrtdh" << endl;
     TokenScanner *scanner = scannerInit(line);
     if(line[0] >= '0' && line[0] <= '9') {
         int tmp = stringToInteger(scanner -> nextToken());
@@ -70,7 +70,7 @@ void processLine(string line, Program & program, EvalState & state) {
     else {
         directlyExcecute(scanner, state, program);
     }
-    cerr << "I'm processed!!!" << endl;
+    // cerr << "I'm processed!!!" << endl;
     // Expression *exp = parseExp(scanner);
     // int value = exp->eval(state);
     // cout << value << endl;

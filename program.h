@@ -126,6 +126,8 @@ public:
 
    int getFirstLineNumber();
 
+   int getPreviousLineNumber(int lineNumber);
+
 /*
  * Method: getNextLineNumber
  * Usage: int nextLine = program.getNextLineNumber(lineNumber);
@@ -139,6 +141,7 @@ public:
 
    void run(EvalState &state);
 
+   void list();
 private:
     std::map<int, Statement*> mp;
 // Fill this in with whatever types and instance variables you need
@@ -147,6 +150,6 @@ private:
 
 void directlyExcecute(TokenScanner *scanner, EvalState &state, Program &program);
 
-Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program);
+Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program, StatementType &type);
 
 #endif

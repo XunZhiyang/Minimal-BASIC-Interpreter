@@ -21,14 +21,15 @@ using namespace std;
  * This code just reads an expression and then checks for extra tokens.
  */
 
-Expression *parseExp(TokenScanner & scanner) {
-    cerr << "parseStart!!!!" << endl;
-   Expression *exp = readE(scanner);
-   if (scanner.hasMoreTokens()) {
-       cerr << "hasMoreTokens!!!!" << endl;
-      error("parseExp: Found extra token: " + scanner.nextToken());
-   }
-   return exp;
+Expression *parseExp(const TokenScanner & scanner) {
+    TokenScanner tmpScanner = scanner;
+    // cerr << "parseStart!!!!" << endl;
+    Expression *exp = readE(tmpScanner);
+    if (tmpScanner.hasMoreTokens()) {
+       // cerr << "hasMoreTokens!!!!" << endl;
+       error("parseExp: Found extra token: " + tmpScanner.nextToken());
+    }
+    return exp;
 }
 
 /*
@@ -65,7 +66,7 @@ Expression *readE(TokenScanner & scanner, int prec) {
 
 Expression *readT(TokenScanner & scanner) {
    string token = scanner.nextToken();
-   cerr<<"__" <<token << "__"<< endl;
+   // cerr<<"__" <<token << "__"<< endl;
    TokenType type = scanner.getTokenType(token);
    if (type == WORD) return new IdentifierExp(token);
    if (type == NUMBER) return new ConstantExp(stringToInteger(token));
