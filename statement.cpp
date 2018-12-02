@@ -19,7 +19,7 @@ using namespace std;
 
 /* Implementation of the Statement class */
 
-Statement::Statement(TokenScanner *_scanner, int _lineNumber) lineNumber(_lineNumber){
+Statement::Statement(TokenScanner *_scanner, int _lineNumber) : lineNumber(_lineNumber){
     line.clear();
     while(_scanner -> hasMoreTokens()){
         line += _scanner -> nextToken();
@@ -129,7 +129,7 @@ void Conditional::execute(EvalState &state) {
 End::End(int _lineNumber) : lineNumber(_lineNumber) {}
 
 void End::execute(EvalState &state) {
-    state.currentLine = -1;
+    state.currentLine = 0;
 }
 
 Rem::Rem(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNumber) {}

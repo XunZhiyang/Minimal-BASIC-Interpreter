@@ -150,6 +150,6 @@ private:
 
 void directlyExcecute(TokenScanner *scanner, EvalState &state, Program &program);
 
-Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program, StatementType &type);
+Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program, StatementType &type, int _lineNumber = 0);
 
 #endif
