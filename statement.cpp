@@ -22,7 +22,7 @@ using namespace std;
 Statement::Statement(TokenScanner *_scanner) : scanner(_scanner){}
 
 Statement::~Statement() {
-   // delete scanner;
+   if(scanner != nullptr) delete scanner;
 }
 Assignment::Assignment(TokenScanner *_scanner) : Statement(_scanner) {}
 
@@ -113,45 +113,46 @@ Rem::Rem(TokenScanner *_scanner) : Statement(_scanner) {}
 
 void Rem::execute(EvalState &state) {}
 
-void Assignment::print() {
+void Assignment::print() const {
     cout << "LET ";
     TokenScanner tmpScanner = *scanner;
     while(tmpScanner.hasMoreTokens()) cout << tmpScanner.nextToken();
     cout << endl;
 }
-void Print::print() {
+void Print::print() const {
     cout << "PRINT ";
     TokenScanner tmpScanner = *scanner;
     while(tmpScanner.hasMoreTokens()) cout << tmpScanner.nextToken();
     cout << endl;
 }
-void Input::print() {
+void Input::print() const {
     cout << "INPUT ";
     TokenScanner tmpScanner = *scanner;
     while(tmpScanner.hasMoreTokens()) cout << tmpScanner.nextToken();
     cout << endl;
 }
-void Goto::print() {
+void Goto::print() const {
     cout << "GOTO ";
     TokenScanner tmpScanner = *scanner;
     while(tmpScanner.hasMoreTokens()) cout << tmpScanner.nextToken();
     cout << endl;
 }
-void Conditional::print() {
+void Conditional::print() const {
     cout << "IF ";
     TokenScanner tmpScanner = *scanner;
     while(tmpScanner.hasMoreTokens()) cout << tmpScanner.nextToken();
     cout << endl;
 }
-void End::print() {
+void End::print() const {
     cout << "END ";
     TokenScanner tmpScanner = *scanner;
     while(tmpScanner.hasMoreTokens()) cout << tmpScanner.nextToken();
     cout << endl;
 }
-void Rem::print() {
+void Rem::print() const{
     cout << "REM ";
     TokenScanner tmpScanner = *scanner;
+    // cout << "_hey_";
     while(tmpScanner.hasMoreTokens()) cout << tmpScanner.nextToken();
     cout << endl;
 }
@@ -183,6 +184,7 @@ StatementType statementClassification(TokenScanner *scanner) {
     if(token == "RUN") return RUN;
     if(token == "QUIT") return QUIT;
     if(token == "CLEAR") return CLEAR;
+    if(token == "LIST") return LIST;
     // cerr << "Classifying!!!" << endl;
     return ERROR;
 }

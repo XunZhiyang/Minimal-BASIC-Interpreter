@@ -68,7 +68,7 @@ public:
 
    Statement(TokenScanner *_scanner);
 
-   virtual void print() = 0;
+   virtual void print() const = 0;
 public:
     TokenScanner *scanner;
 };
@@ -79,7 +79,7 @@ public:
 
     virtual void execute(EvalState &state);
 
-    virtual void print();
+    virtual void print() const;
 };
 
 class Print : public Statement {
@@ -88,7 +88,7 @@ public:
 
     virtual void execute(EvalState &state);
 
-    virtual void print();
+    virtual void print() const;
 };
 
 class Input : public Statement {
@@ -97,7 +97,7 @@ public:
 
     virtual void execute(EvalState &state);
 
-    virtual void print();
+    virtual void print() const;
 };
 
 class Goto : public Statement {
@@ -106,7 +106,7 @@ public:
 
     virtual void execute(EvalState &state);
 
-    virtual void print();
+    virtual void print() const;
 };
 
 class Conditional : public Statement {
@@ -115,14 +115,14 @@ public:
 
     virtual void execute(EvalState &state);
 
-    virtual void print();
+    virtual void print() const;
 };
 
 class End : public Statement {
 public:
     virtual void execute(EvalState &state);
 
-    virtual void print();
+    virtual void print() const;
 };
 
 class Rem : public Statement {
@@ -131,7 +131,7 @@ public:
 
     virtual void execute(EvalState &state);
 
-    virtual void print();
+    virtual void print() const;
 };
 TokenScanner *scannerInit(string);
 

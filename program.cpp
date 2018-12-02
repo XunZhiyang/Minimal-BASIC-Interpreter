@@ -105,11 +105,11 @@ void directlyExcecute(TokenScanner *scanner, EvalState &state, Program &program)
     }
     else {
         if(type == RUN) program.run(state);
-        if(type == CLEAR) {
+        else if(type == CLEAR) {
             program.clear();
             state.clear();
         }
-        if(type == LIST) {
+        else if(type == LIST) {
             program.list();
         }
     }
@@ -166,7 +166,7 @@ Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &progr
             break;
         default :
             delete scanner;
-            error("NO SUCH STATEMENT");
+            error("SYNTAX ERROR");
     }
     return p;
 }
