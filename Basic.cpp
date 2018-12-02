@@ -37,7 +37,7 @@ int main() {
       } catch (ErrorException & ex) {
           if(ex.getMessage() == "QUIT") break;
           // cerr << "I'm error!!!" << endl;
-         cerr << "Error: " << ex.getMessage() << endl;
+         cout << ex.getMessage() << endl;
       }
       // cerr << "I'm aftererror!!!" << endl;
    }
