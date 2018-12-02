@@ -36,14 +36,12 @@ void Program::addSourceLine(int lineNumber, TokenScanner *scanner) {
     // while (scanner -> hasMoreTokens()) {
         // cerr <<"___" << scanner -> nextToken() << "___" <<endl;
     // }
+    if(type == DELETE) {
+        removeSourceLine(lineNumber);
+    }
     if(p != NULL){
-        if(type == DELETE) {
-            removeSourceLine(lineNumber);
-        }
-        else{
-            if(mp.count(lineNumber)) delete mp[lineNumber];
-            mp[lineNumber] = p;
-        }
+        if(mp.count(lineNumber)) delete mp[lineNumber];
+        mp[lineNumber] = p;
     }
 }
 
