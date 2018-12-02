@@ -69,7 +69,7 @@ public:
  * program in the correct sequence.
  */
 
-   void addSourceLine(int lineNumber, TokenScanner& scanner);
+   void addSourceLine(int lineNumber, TokenScanner *scanner);
 
 /*
  * Method: removeSourceLine
@@ -98,7 +98,7 @@ public:
  * Usage: program.setParsedStatement(lineNumber, stmt);
  * ----------------------------------------------------
  * Adds the parsed representation of the statement to the statement
- * at the specified line number.  If no such line exists, this
+ * at the specified line n umber.  If no such line exists, this
  * method raises an error.  If a previous parsed representation
  * exists, the memory for that statement is reclaimed.
  */
@@ -145,8 +145,8 @@ private:
 
 };
 
-void directlyExcecute(TokenScanner &scanner, EvalState &state, Program &program);
+void directlyExcecute(TokenScanner *scanner, EvalState &state, Program &program);
 
-Statement *convertToStatement(TokenScanner &scanner, bool direct, Program &program);
+Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program);
 
 #endif

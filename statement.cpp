@@ -19,26 +19,31 @@ using namespace std;
 
 /* Implementation of the Statement class */
 
-Statement::Statement(const TokenScanner &_scanner) : scanner(_scanner){}
+Statement::Statement(TokenScanner *_scanner) : scanner(_scanner){}
 
 Statement::~Statement() {
-   /* Empty */
+   delete scanner;
 }
-Assignment::Assignment(const TokenScanner &_scanner) : Statement(_scanner) {}
+Assignment::Assignment(TokenScanner *_scanner) : Statement(_scanner) {}
 
 void Assignment::execute(EvalState &state) {
-    parseExp(scanner) -> eval(state);
+    parseExp(*scanner) -> eval(state);
 }
 
-Print::Print(const TokenScanner &_scanner) : Statement(_scanner) {}
+Print::Print(TokenScanner *_scanner) : Statement(_scanner) {}
 
 void Print::execute(EvalState &state) {
-    Expression *exp = parseExp(scanner);
+    cerr << "I'm printing!!!" << endl;
+    // while (scanner.hasMoreTokens()) {
+    //     cerr <<"___" << scanner.nextToken() << "___" <<endl;
+    // }
+    Expression *exp = parseExp(*scanner);
     int value = exp->eval(state);
     cout << value << endl;
+    cerr << "I'm printing!!!" << endl;
 }
 
-Input::Input(const TokenScanner &_scanner) : Statement(_scanner) {}
+Input::Input(TokenScanner *_scanner) : Statement(_scanner) {}
 
 void Input::execute(EvalState &state) {
     bool flag = true;
@@ -47,7 +52,7 @@ void Input::execute(EvalState &state) {
         try {
             cout << " ? ";
             string inputString = getLine();
-            state.setValue(scanner.nextToken(), stringToInteger(inputString));
+            state.setValue(scanner -> nextToken(), stringToInteger(inputString));
         } catch (...) {
             flag = true;
             cerr << "INVALID NUMBER" << endl;
@@ -55,22 +60,22 @@ void Input::execute(EvalState &state) {
     }
 }
 
-Goto::Goto(const TokenScanner &_scanner) : Statement(_scanner) {}
+Goto::Goto(TokenScanner *_scanner) : Statement(_scanner) {}
 
 void Goto::execute(EvalState &state) {
-    Expression *exp = parseExp(scanner);
+    Expression *exp = parseExp(*scanner);
     int value = exp->eval(state);
     state.currentLine = value;
 }
 
-Conditional::Conditional(const TokenScanner &_scanner) : Statement(_scanner) {}
+Conditional::Conditional(TokenScanner *_scanner) : Statement(_scanner) {}
 
 void Conditional::execute(EvalState &state) {
     TokenScanner tmpScanner;
     string cmp;
     int v1, v2;
     for(;;) {
-        string p = scanner.nextToken();
+        string p = scanner -> nextToken();
         if(p == "<" || p == "=" || p == ">") {
             v1 = parseExp(tmpScanner) -> eval(state);
             cmp = p;
@@ -80,7 +85,7 @@ void Conditional::execute(EvalState &state) {
     }
     while(tmpScanner.hasMoreTokens()) tmpScanner.nextToken();
     for(;;) {
-        string p = scanner.nextToken();
+        string p = scanner -> nextToken();
         if(p == "THEN") {
             v2 = parseExp(tmpScanner) -> eval(state);
             break;
@@ -97,34 +102,36 @@ void Conditional::execute(EvalState &state) {
     //     case ">" : flag = (v1 > v2); break;
     // }
     if(flag) {
-        Expression *exp = parseExp(scanner);
+        Expression *exp = parseExp(*scanner);
         int value = exp->eval(state);
         state.currentLine = value;
     }
 }
-// End::End(const TokenScanner &_scanner) : Statement(_scanner) {}
+// End::End(TokenScanner *_scanner) : Statement(_scanner) {}
 
 void End::execute(EvalState &state) {
     state.currentLine = -1;
 }
 
-// Rem::Rem(const TokenScanner &_scanner) : Statement(_scanner) {}
+// Rem::Rem(TokenScanner *_scanner) : Statement(_scanner) {}
 
 void Rem::execute(EvalState &state) {}
 
-TokenScanner scannerInit(string line) {
-    TokenScanner scanner;
-    scanner.ignoreWhitespace();
-    scanner.scanNumbers();
-    scanner.setInput(line);
+TokenScanner *scannerInit(string line) {
+    TokenScanner *scanner = new TokenScanner;
+    scanner -> scanStrings();
+    scanner -> ignoreWhitespace();
+    scanner -> scanNumbers();
+    scanner -> setInput(line);
     return scanner;
 }
 
-StatementType statementClassification(TokenScanner &scanner) {
-    string token = scanner.nextToken();
-    // char s[7];
-    // for(int i = 0; i < token.length(); ++i) s[i] = token[i];
-    // s[token.length()] = '\0';
+StatementType statementClassification(TokenScanner *scanner) {
+    cerr << "Classifying!!!" << endl;
+    cerr<<scanner;
+    string token = scanner -> nextToken();
+    cerr << "Classifying!!!" << endl;
+
     if(token == "LET") return ASSIGNMENT;
     if(token == "PRINT") return PRINT;
     if(token == "INPUT") return INPUT;
@@ -133,15 +140,7 @@ StatementType statementClassification(TokenScanner &scanner) {
     if(token == "END") return END;
     if(token == "REM") return REM;
     if(token == "RUN") return RUN;
-    // switch(s) {
-    //     case "LET" : return ASSIGNMENT;
-    //     case "PRINT" : return PRINT;
-    //     case "INPUT" : return INPUT;
-    //     case "GOTO" : return GOTO;
-    //     case "IF" : return CONDITIONAL;
-    //     case "END" : return END;
-    //     case "REM" : return REM;
-    //     case "RUN" : return RUN;
-    // }
+    if(token == "QUIT") return QUIT;
+    cerr << "Classifying!!!" << endl;
     return ERROR;
 }

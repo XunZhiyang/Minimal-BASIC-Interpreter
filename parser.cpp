@@ -22,8 +22,10 @@ using namespace std;
  */
 
 Expression *parseExp(TokenScanner & scanner) {
+    cerr << "parseStart!!!!" << endl;
    Expression *exp = readE(scanner);
    if (scanner.hasMoreTokens()) {
+       cerr << "hasMoreTokens!!!!" << endl;
       error("parseExp: Found extra token: " + scanner.nextToken());
    }
    return exp;
@@ -63,6 +65,7 @@ Expression *readE(TokenScanner & scanner, int prec) {
 
 Expression *readT(TokenScanner & scanner) {
    string token = scanner.nextToken();
+   cerr<<"__" <<token << "__"<< endl;
    TokenType type = scanner.getTokenType(token);
    if (type == WORD) return new IdentifierExp(token);
    if (type == NUMBER) return new ConstantExp(stringToInteger(token));

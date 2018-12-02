@@ -20,7 +20,7 @@ using namespace std;
 // }
 
 Program::~Program() {
-   // Replace this stub with your own code
+    clear();
 }
 
 void Program::clear() {
@@ -30,8 +30,12 @@ void Program::clear() {
     mp.clear();
 }
 
-void Program::addSourceLine(int lineNumber, TokenScanner &scanner) {
+void Program::addSourceLine(int lineNumber, TokenScanner *scanner) {
+
     Statement *p = convertToStatement(scanner, false, *this);
+    // while (scanner -> hasMoreTokens()) {
+    //     cerr <<"___" << scanner -> nextToken() << "___" <<endl;
+    // }
     if(p != NULL){
         if(mp.count(lineNumber)) delete mp[lineNumber];
         mp[lineNumber] = p;
@@ -74,19 +78,25 @@ void Program::run(EvalState &state) {
     }
 }
 
-void directlyExcecute(TokenScanner &scanner, EvalState &state, Program &program) {
+void directlyExcecute(TokenScanner *scanner, EvalState &state, Program &program) {
     Statement *p = convertToStatement(scanner, true, program);
+    cerr << "I'm finishing!!!" << endl;
     if(p != NULL) {
+        cerr << "I'm finishing!!!" << endl;
         p -> execute(state);
         delete p;
+        cerr << "I'm finished!!!" << endl;
     }
     else {
         program.run(state);
     }
 }
 
-Statement *convertToStatement(TokenScanner &scanner, bool direct, Program &program) {
+Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program) {
+    cerr << "Converting!!!" << endl;
     StatementType type = statementClassification(scanner);
+    cerr << "Classification succeed!!" << endl;
+
     Statement *p = NULL;
     switch (type) {
         case ASSIGNMENT :
@@ -115,7 +125,11 @@ Statement *convertToStatement(TokenScanner &scanner, bool direct, Program &progr
             p = new Rem;
             break;
         case RUN :
-            if(!direct || scanner.hasMoreTokens()) error("SYNTAX ERROR");
+            if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
+            break;
+        case QUIT :
+            if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
+            error("QUIT");
             break;
         default :
             error("NO SUCH STATEMENT");

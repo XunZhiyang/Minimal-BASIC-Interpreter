@@ -17,7 +17,7 @@
 #include "StanfordCPPLib/tokenscanner.h"
 
 
-enum StatementType {ASSIGNMENT, PRINT, INPUT, GOTO, CONDITIONAL, END, REM, RUN, ERROR};
+enum StatementType {ASSIGNMENT, PRINT, INPUT, GOTO, CONDITIONAL, END, REM, RUN, ERROR, QUIT};
 
 /*
  * Class: Statement
@@ -41,7 +41,7 @@ public:
 
     Statement() = default;
 
-    Statement(const TokenScanner &_scanner);
+    Statement(TokenScanner *_scanner);
 
 /*
  * Destructor: ~Statement
@@ -68,40 +68,40 @@ public:
    virtual void execute(EvalState & state) = 0;
 
 public:
-    TokenScanner scanner;
+    TokenScanner *scanner;
 };
 
 class Assignment : public Statement {
 public:
-    Assignment(const TokenScanner &_scanner);
+    Assignment(TokenScanner *_scanner);
 
     virtual void execute(EvalState &state);
 };
 
 class Print : public Statement {
 public:
-    Print(const TokenScanner &_scanner);
+    Print(TokenScanner *_scanner);
 
     virtual void execute(EvalState &state);
 };
 
 class Input : public Statement {
 public:
-    Input(const TokenScanner &_scanner);
+    Input(TokenScanner *_scanner);
 
     virtual void execute(EvalState &state);
 };
 
 class Goto : public Statement {
 public:
-    Goto(const TokenScanner &_scanner);
+    Goto(TokenScanner *_scanner);
 
     virtual void execute(EvalState &state);
 };
 
 class Conditional : public Statement {
 public:
-    Conditional(const TokenScanner &_scanner);
+    Conditional(TokenScanner *_scanner);
 
     virtual void execute(EvalState &state);
 };
@@ -115,9 +115,9 @@ class Rem : public Statement {
 public:
     virtual void execute(EvalState &state);
 };
-TokenScanner scannerInit(string);
+TokenScanner *scannerInit(string);
 
-StatementType statementClassification(TokenScanner &scanner);
+StatementType statementClassification(TokenScanner *scanner);
 
 
 /*
