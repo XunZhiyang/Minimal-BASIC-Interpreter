@@ -86,6 +86,7 @@ void Program::run(EvalState &state) {
         mp[i] -> execute(state);
         if(i == 0) break;
         if(i < 0) {
+            if(!mp.count(-i)) error("LINE NUMBER ERROR");
             i = getPreviousLineNumber(-i);
         }
     }
