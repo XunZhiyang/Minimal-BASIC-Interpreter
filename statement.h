@@ -66,6 +66,8 @@ public:
 
    virtual void execute(EvalState & state) = 0;
 
+   Statement::Statement(int _lineNumber);
+
    Statement(TokenScanner *_scanner, int _lineNumber);
 
    virtual void print() const = 0;

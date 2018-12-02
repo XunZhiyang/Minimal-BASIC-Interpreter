@@ -27,6 +27,8 @@ Statement::Statement(TokenScanner *_scanner, int _lineNumber) : lineNumber(_line
     }
 }
 
+Statement::Statement(int _lineNumber) : lineNumber(_lineNumber) {}
+
 Statement::~Statement() {
 }
 Assignment::Assignment(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNumber) {}
@@ -126,7 +128,7 @@ void Conditional::execute(EvalState &state) {
     // cerr << "finish third part" << endl;
     delete scanner;
 }
-End::End(int _lineNumber) : lineNumber(_lineNumber) {}
+End::End(int _lineNumber) : Statement(_lineNumber) {}
 
 void End::execute(EvalState &state) {
     state.currentLine = 0;
