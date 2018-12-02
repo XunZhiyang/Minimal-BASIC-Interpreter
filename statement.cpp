@@ -67,7 +67,7 @@ void Input::execute(EvalState &state) {
             state.setValue(scanner -> nextToken(), stringToInteger(inputString));
         } catch (...) {
             flag = true;
-            // cerr << "INVALID NUMBER" << endl;
+            cout << "INVALID NUMBER" << endl;
         }
     }
     delete scanner;
