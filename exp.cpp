@@ -64,6 +64,7 @@ int ConstantExp::getValue() {
  */
 
 IdentifierExp::IdentifierExp(string name) {
+    if(name ==  "LET") error("SYNTAX ERROR");
    this->name = name;
 }
 
