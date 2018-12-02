@@ -123,7 +123,7 @@ void directlyExcecute(TokenScanner *scanner, EvalState &state, Program &program)
 
 Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &program, StatementType &type, int lineNumber) {
     // cerr << "Converting!!!" << endl;
-    if(!scanner.hasMoreTokens()) {
+    if(!scanner -> hasMoreTokens()) {
         type = DELETE;
         return NULL;
     }
