@@ -93,29 +93,26 @@ void Conditional::execute(EvalState &state) {
     string cmp;
     int v1, v2;
     // cerr << "start first part" << endl;
+    string tmp = "";
     for(;;) {
         string p = scanner -> nextToken();
-        // cerr << "**" << p <<"**" << endl;
         if(p == "<" || p == "=" || p == ">") {
-            v1 = parseExp(tmpScanner) -> eval(state);
+            v1 = parseExp(tmpScanner.setInput(tmp)) -> eval(state);
             cmp = p;
             break;
         }
-        tmpScanner.saveToken(p);
+        tmp += p;
     }
-    // cerr << "finish first part" << endl;
     while(tmpScanner.hasMoreTokens()) tmpScanner.nextToken();
-    // cerr << "start second part" << endl;
+    tmp = "";
     for(;;) {
         string p = scanner -> nextToken();
-        // cerr << "__" << p <<"__" << endl;
         if(p == "THEN") {
-            v2 = parseExp(tmpScanner) -> eval(state);
+            v2 = parseExp(tmpScanner.setInput(tmp)) -> eval(state);
             break;
         }
-        tmpScanner.saveToken(p);
+        tmp += p;
     }
-    // cerr << "finish second part" << endl;
     bool flag = false;
     if(cmp == "=") flag = (v1 == v2);
     if(cmp == "<") flag = (v1 < v2);
@@ -125,7 +122,6 @@ void Conditional::execute(EvalState &state) {
         int value = exp->eval(state);
         state.currentLine = -value;
     }
-    // cerr << "finish third part" << endl;
     delete scanner;
 }
 End::End(int _lineNumber) : Statement(_lineNumber) {}
