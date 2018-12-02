@@ -122,7 +122,7 @@ public:
 
 class End : public Statement {
 public:
-    End(int _linenumber);
+    End(int _lineNumber);
 
     virtual void execute(EvalState &state);
 
