@@ -97,7 +97,7 @@ void Conditional::execute(EvalState &state) {
     for(;;) {
         string p = scanner -> nextToken();
         if(p == "<" || p == "=" || p == ">") {
-            v1 = parseExp(tmpScanner.setInput(tmp)) -> eval(state);
+            v1 = (tmpScanner.setInput(tmp), parseExp(tmpScanner) -> eval(state));
             cmp = p;
             break;
         }
@@ -108,7 +108,7 @@ void Conditional::execute(EvalState &state) {
     for(;;) {
         string p = scanner -> nextToken();
         if(p == "THEN") {
-            v2 = parseExp(tmpScanner.setInput(tmp)) -> eval(state);
+            v2 = parseExp((tmpScanner.setInput(tmp), tmpScanner)) -> eval(state);
             break;
         }
         tmp += p;
