@@ -70,7 +70,8 @@ public:
 
    virtual void print() const = 0;
 public:
-    TokenScanner *scanner;
+    // TokenScanner *scanner;
+    string line;
 };
 
 class Assignment : public Statement {

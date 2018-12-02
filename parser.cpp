@@ -21,13 +21,12 @@ using namespace std;
  * This code just reads an expression and then checks for extra tokens.
  */
 
-Expression *parseExp(const TokenScanner & scanner) {
-    TokenScanner tmpScanner = scanner;
+Expression *parseExp(TokenScanner & scanner) {
     // cerr << "parseStart!!!!" << endl;
-    Expression *exp = readE(tmpScanner);
-    if (tmpScanner.hasMoreTokens()) {
+    Expression *exp = readE(scanner);
+    if (scanner.hasMoreTokens()) {
        // cerr << "hasMoreTokens!!!!" << endl;
-       error("parseExp: Found extra token: " + tmpScanner.nextToken());
+       error("parseExp: Found extra token: " + scanner.nextToken());
     }
     return exp;
 }

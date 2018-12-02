@@ -149,23 +149,23 @@ Statement *convertToStatement(TokenScanner *scanner, bool direct, Program &progr
             break;
         case RUN :
             if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
-            delete scanner;
+            // delete scanner;
             break;
         case QUIT :
-            if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
-            delete scanner;
+        if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
+            // delete scanner;
             error("QUIT");
             break;
         case CLEAR :
             if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
-            delete scanner;
+            // delete scanner;
             break;
         case LIST :
             if(!direct || scanner -> hasMoreTokens()) error("SYNTAX ERROR");
-            delete scanner;
+            // delete scanner;
             break;
         default :
-            delete scanner;
+            // delete scanner;
             error("SYNTAX ERROR");
     }
     return p;
