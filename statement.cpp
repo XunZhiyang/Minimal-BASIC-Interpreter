@@ -137,25 +137,25 @@ Rem::Rem(TokenScanner *_scanner, int _lineNumber) : Statement(_scanner, _lineNum
 void Rem::execute(EvalState &state) {}
 
 void Assignment::print() const {
-    cout << "LET " << line << endl;
+    cout << lineNumber << " LET " << line << endl;
 }
 void Print::print() const {
-    cout << "PRINT " << line << endl;
+    cout << lineNumber << " PRINT " << line << endl;
 }
 void Input::print() const {
-    cout << "INPUT " << line << endl;
+    cout << lineNumber << " INPUT " << line << endl;
 }
 void Goto::print() const {
-    cout << "GOTO" << line << endl;
+    cout << lineNumber << " GOTO" << line << endl;
 }
 void Conditional::print() const {
-    cout << "IF " << line << endl;
+    cout << lineNumber << " IF " << line << endl;
 }
 void End::print() const {
-    cout << "END " << line << endl;
+    cout << lineNumber << " END " << line << endl;
 }
 void Rem::print() const{
-    cout << "REM " << line << endl;
+    cout << lineNumber << " REM " << line << endl;
 }
 
 

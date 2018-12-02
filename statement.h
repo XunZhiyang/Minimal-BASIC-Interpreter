@@ -72,7 +72,7 @@ public:
 public:
     // TokenScanner *scanner;
     string line;
-    int _lineNumber;
+    int lineNumber;
 };
 
 class Assignment : public Statement {
